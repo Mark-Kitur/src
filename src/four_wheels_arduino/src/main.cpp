@@ -226,8 +226,6 @@ void setup()
     pinMode(IN4, OUTPUT);
     pinMode(ENB, OUTPUT);
 
-    pinMode(driver_vcc, OUTPUT);
-    digitalWrite(driver_vcc, HIGH);
 
     // Motors initially stopped
     setMotor(ENA, IN1, IN2, 0.0f);
@@ -669,10 +667,10 @@ void sendFeedback()
     Serial.print(linear_acceleration_y, 4);
     Serial.print(",");
 
-    Serial.print(linear_acceleration_z, 4);
+    Serial.println(linear_acceleration_z, 4);
 
 
-    Serial.println();
+    //Serial.println();
 }
 
 
