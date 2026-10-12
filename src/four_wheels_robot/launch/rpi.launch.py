@@ -48,11 +48,11 @@ def generate_launch_description():
 )
 
 
-    # imu_broadcaster_spawner = Node(
-    #     package="controller_manager",
-    #     executable="spawner",
-    #     arguments=['imu_sensor_broadcaster']
-    # )
+    imu_broadcaster_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=['imu_sensor_broadcaster']
+    )
 
     velocity_spawner=Node(
         package="controller_manager",

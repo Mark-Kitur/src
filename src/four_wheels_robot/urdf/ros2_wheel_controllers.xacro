@@ -45,6 +45,36 @@
 
         </joint>
 
+				<sensor name="imu_sensor">
+					<!-- orientation.x -->
+					<!-- orientation.y -->
+					<!-- orientation.z -->
+					<!-- orientation.y -->
+					<!---->
+					<!-- angular_velocity.x -->
+					<!-- angular_velocity.y -->
+					<!-- angular_velocity.z -->
+					<!---->
+					<!-- linear_acceleration.x -->
+					<!-- linear_acceleration.y -->
+					<!-- linear_acceleration.z -->
+
+					<state_interface name="orientation.x" />
+					<state_interface name="orientation.y" />
+					<state_interface name="orientation.z" />
+					<state_interface name="orientation.w" />
+
+					<state_interface name="angular_velocity.x" />
+					<state_interface name="angular_velocity.y" />
+					<state_interface name="angular_velocity.z" />
+
+					<state_interface name="linear_acceleration.x" />
+					<state_interface name="linear_acceleration.y" />
+					<state_interface name="linear_acceleration.z" />
+
+				</sensor> 
+
+
 
     </ros2_control>
 

@@ -1,0 +1,13 @@
+<library path="four_wheel_hardware">
+
+  <class
+    name="four_wheel_hardware/DiffBotSystemHardware"
+    type="four_wheel_hardware::DiffBotSystemHardware"
+    base_class_type="hardware_interface::SystemInterface">
+    <description>
+      Differential drive hardware interface using serial/Arduino.
+    </description>
+
+  </class>
+
+</library>
