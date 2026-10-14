@@ -1,7 +1,7 @@
 <?xml version="1.1"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro" name="four_wheels_robot">
     
-    <xacro:property name="wheel_radius" value="0.045"/>
+    <xacro:property name="wheel_radius" value="0.090"/>
     <xacro:property name="wheel_length" value="0.04"/>
 
     <!-- Include control definitions -->
