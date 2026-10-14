@@ -60,6 +60,12 @@ def generate_launch_description():
         executable="spawner",
         arguments=['velocity_controller',"--controller-manager",'/controller_manager']
     )
+    robot_localization_node = Node(
+            package='robot_localization',
+            executable='ekf_node',
+            name='ekf_filter_node',
+            output='screen',
+            parameters=[os.path.join(pkg_name, 'config', 'ekf.yaml')])
 
     ld = LaunchDescription()
 
@@ -75,4 +81,5 @@ def generate_launch_description():
     ld.add_action(robot_state_publisher)
     ld.add_action(controller_manager)
     ld.add_action(timer_action)
+    ld.add_action(robot_localization_node)
     return ld
