@@ -9,7 +9,7 @@ from ament_index_python.packages import get_package_share_directory
 def generate_launch_description():
     # 1. Declare the launch argument and setup runtime tracking
     declare_use_sim_time = DeclareLaunchArgument(
-        "use_sim_time", default_value="true", description="Use sim time"
+        "use_sim_time", default_value="false", description="Use sim time"
     )
     use_sim_time_var = LaunchConfiguration('use_sim_time')
     
@@ -33,28 +33,20 @@ def generate_launch_description():
     )
 
     # 3. Individual Nav2 Node Configurations
-# Replace this:
-    amcl_node = Node(
-        package="nav2_amcl",
-        executable="amcl",
-        name="amcl",
-        output="screen",
-        parameters=[amcl_yaml, {"use_sim_time": use_sim_time_var}],
-    )
+
 
 # With this:
     amcl_node = Node(
-        package="nav2_amcl",
-        executable="amcl",
-        name="amcl",
-        output="screen",
-        parameters=[
-            amcl_yaml, 
+    package="nav2_amcl",
+    executable="amcl",
+    name="amcl",
+    output="screen",
+    parameters=[
+            amcl_yaml,
             {"use_sim_time": use_sim_time_var},
-            {"publish_tf": True},      # ← FORCE this parameter
-            {"publish_odom": True}     # ← FORCE this parameter too
+            {"tf_broadcast": True}   
         ],
-    )
+    )   
     nav2_controller = Node(
         package="nav2_controller",
         executable="controller_server",

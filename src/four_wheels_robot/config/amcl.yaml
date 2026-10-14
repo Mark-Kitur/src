@@ -5,12 +5,12 @@ amcl:
     alpha3: 0.2
     alpha4: 0.2
     alpha5: 0.2
-    base_frame_id: "base_link"               # Usually base_link, not base_footprint
+    base_frame_id: "base_link"
     global_frame_id: "map"
     odom_frame_id: "odom"
-    laser_model_type: "likelihood_field"     # Good choice for your Gazebo lidar
+    laser_model_type: "likelihood_field"
     max_beams: 180
-    max_particles: 2000                      # Fixed typo + better value
+    max_particles: 2000
     min_particles: 500
     laser_likelihood_max_dist: 2.0
     laser_max_range: 20.0
@@ -28,9 +28,8 @@ amcl:
     robot_model_type: "nav2_amcl::DifferentialMotionModel"
     save_pose_rate: 0.5
     sigma_hit: 0.2
-    publish_tf: true
-    publish_odom: true
-    transform_tolerance: 0.1                 # Usually 0.1
+    tf_broadcast: true              # ← was "publish_tf"
+    transform_tolerance: 0.5        # ← was 0.1, see below
     update_min_a: 0.2
     update_min_d: 0.25
     z_hit: 0.5
@@ -46,4 +45,4 @@ amcl:
       x: 0.0
       y: 0.0
       z: 0.0
-      yaw: 0.0
+      yaw: 0.0   
