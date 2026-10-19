@@ -44,7 +44,7 @@ def generate_launch_description():
     parameters=[
             amcl_yaml,
             {"use_sim_time": use_sim_time_var},
-            {"tf_broadcast": True}   
+            {"tf_broadcast": False}   
         ],
     )   
     nav2_controller = Node(

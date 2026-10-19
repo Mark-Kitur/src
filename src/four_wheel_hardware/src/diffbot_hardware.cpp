@@ -292,7 +292,7 @@ DiffBotSystemHardware::read(const rclcpp::Time &,
   set_state("imu_sensor/orientation.x", orientation_x);
   set_state("imu_sensor/orientation.y", orientation_y);
   set_state("imu_sensor/orientation.z", orientation_z);
-  set_state("imu_sensor/orientation.w", orientation_y);
+  set_state("imu_sensor/orientation.w", orientation_w);
 
   set_state("imu_sensor/angular_velocity.x", angular_velocity_x);
   set_state("imu_sensor/angular_velocity.y", angular_velocity_y);

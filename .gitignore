@@ -3,4 +3,5 @@
 .vscode
 /build 
 /install 
-/log 
+/log
+/sllidar_ros2
