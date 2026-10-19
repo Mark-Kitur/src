@@ -1,7 +1,9 @@
 /map
 *.pyc
+*.pdf
+*.gv
 .vscode
 /build 
 /install 
 /log
-/sllidar_ros2
+/src/sllidar_ros2
