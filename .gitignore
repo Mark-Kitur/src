@@ -19,6 +19,8 @@ install/
 log/
 src/sllidar_ros2
 
+/meshes
+
 *.pdf
 *.gv
 log.txt
