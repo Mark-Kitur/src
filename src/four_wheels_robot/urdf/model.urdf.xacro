@@ -1,8 +1,8 @@
 <?xml version="1.1"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro" name="four_wheels_robot">
     
-    <xacro:property name="wheel_radius" value="0.090"/>
-    <xacro:property name="wheel_length" value="0.04"/>
+    <xacro:property name="wheel_radius" value="0.0425"/>
+    <xacro:property name="wheel_length" value="0.02"/>
 
     <!-- Include control definitions -->
     <!-- <xacro:include filename="$(find four_wheels_robot)/urdf/ros2_wheel_controllers.xacro"/> -->
@@ -48,7 +48,7 @@
         <visual>
             <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
             <geometry>
-                <box size="0.5 0.18 0.1"/>
+                <box size="0.3 0.3 0.1"/>
             </geometry>
             <material name="">
                 <color rgba="1.0 0.0 0.0 1.0"/>
@@ -57,7 +57,7 @@
         <collision>
             <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
             <geometry>
-                <box size="0.5 0.18 0.1"/>
+                <box size="0.3 0.3 0.1"/>
             </geometry>
         </collision>
     </link>
@@ -80,10 +80,10 @@
         </joint>
     </xacro:macro>
 
-    <xacro:wheel_joint prefix="front_left"  x="0.12" y="0.12" r="0"/>
-    <xacro:wheel_joint prefix="front_right" x="0.12" y="-0.12" r="0"/>
-    <xacro:wheel_joint prefix="back_left"   x="-0.12" y="0.12" r="0"/>
-    <xacro:wheel_joint prefix="back_right"  x="-0.12" y="-0.12" r="0"/>
+    <xacro:wheel_joint prefix="front_left"  x="0.10" y="0.162" r="0"/>
+    <xacro:wheel_joint prefix="front_right" x="0.10" y="-0.162" r="0"/>
+    <xacro:wheel_joint prefix="back_left"   x="-0.10" y="0.162" r="0"/>
+    <xacro:wheel_joint prefix="back_right"  x="-0.10" y="-0.162" r="0"/>
 
     <!--Adding a lidar-->
     <link name="laser_link">
@@ -150,7 +150,7 @@
  <joint name="camera_joint" type="fixed">
     <parent link="base_link"/>
     <child link="camera_link"/>
-    <origin xyz="0.25 0.0 0.03" rpy="0 0 0"/>
+    <origin xyz="0.15 0.0 0.03" rpy="0 0 0"/>
     
  </joint>
 

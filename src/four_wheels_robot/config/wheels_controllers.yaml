@@ -23,7 +23,7 @@ velocity_controller:
     right_wheel_names: ["back_right_wheel_joint","front_right_wheel_joint"]
       
     wheel_separation: 0.26
-    wheel_radius: 0.096
+    wheel_radius: 0.085
 
     odom_frame_id: odom
     base_frame_id: base_footprint

@@ -19,7 +19,7 @@ def generate_launch_description():
     # 2. Get exact file paths
     amcl_yaml = os.path.join(pkg_share_dir, 'config', 'amcl.yaml')
     nav_params = os.path.join(pkg_share_dir, 'config', 'nav2_params.yaml')
-    map_file = os.path.join(pkg_share_dir, 'map', 't_map_3.yaml')  
+    map_file = os.path.join(pkg_share_dir, 'map', 'dojo_gamefield.yaml')  
 
     map_server_node = Node(
         package="nav2_map_server",
