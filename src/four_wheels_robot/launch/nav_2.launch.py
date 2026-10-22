@@ -33,6 +33,21 @@ def generate_launch_description():
     )
 
     # 3. Individual Nav2 Node Configurations
+    fake_lidar = Node(
+        package="tf2_ros",
+        executable="static_transform_publisher",
+        arguments=[
+            "--x", "0.0",
+            "--y", "0.0",
+            "--z", "0.0",
+            "--roll", "0.0",
+            "--pitch", "0.0",
+            "--yaw", "0.0",
+            "--frame-id", "map",
+            "--child-frame-id", "odom",
+        ]
+
+    )
 
 
 # With this:
@@ -133,6 +148,7 @@ def generate_launch_description():
 
     return LaunchDescription([
         declare_use_sim_time,
+        fake_lidar,
         map_server_node,
         amcl_node,
         nav2_planner,
