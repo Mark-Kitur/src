@@ -36,6 +36,9 @@ setup(
     entry_points={
         'console_scripts': [
             "ai=four_wheels_robot.image_processing:main",
+            "bb=four_wheels_robot.AI_blackboard:main",
         ],
     },
 )
+
+# four_wheels_robot/AI_blackboard.py

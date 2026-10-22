@@ -24,7 +24,7 @@ def generate_launch_description():
 
     bridge_conf = os.path.join(pkg_share_dir,'config', "bridge.yaml")
 
-    world_path = os.path.join(pkg_share_dir,"world", 'simple_.sdf')
+    world_path = os.path.join(pkg_share_dir,"world", 'object.sdf')
 
     
     robot_state_publisher = Node(
