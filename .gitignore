@@ -1,0 +1,12 @@
+build/
+install/
+log/
+.vscode/
+__pycache__/
+*.pyc
+src/internship2026/
+scripts/auto_mapper.py
+scripts/cmd_smoother.py
+src/dojo_robot/config/old_bridge_reference.yaml
+src/dojo_robot/launch/dojo_sim.launch.py
+src/dojo_robot/models/gamefield_arena.zip
