@@ -16,8 +16,7 @@ from launch_ros.descriptions import ParameterFile
 
 
 def generate_launch_description():
-    declare_use_sim_time = DeclareLaunchArgument(
-            "use_sim_time", default_value="false", description="Use sim time")
+    declare_use_sim_time = False
     #use_sim_time_var = LaunchConfiguration('use_sim_time')
     
     pkg_name = "four_wheels_robot"

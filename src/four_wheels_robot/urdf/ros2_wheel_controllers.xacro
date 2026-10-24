@@ -45,7 +45,7 @@
 
         </joint>
 
-				<sensor name="imu_sensor">
+				<sensor name="imu_link">
 					<!-- orientation.x -->
 					<!-- orientation.y -->
 					<!-- orientation.z -->
