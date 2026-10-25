@@ -19,7 +19,7 @@ def generate_launch_description():
     # 2. Get exact file paths
     amcl_yaml = os.path.join(pkg_share_dir, 'config', 'amcl.yaml')
     nav_params = os.path.join(pkg_share_dir, 'config', 'nav2_params.yaml')
-    map_file = os.path.join(pkg_share_dir, 'map', 'map_1.yaml')  
+    map_file = os.path.join(pkg_share_dir, 'map', 'trevor.yaml')  
 
     map_server_node = Node(
         package="nav2_map_server",
@@ -59,7 +59,7 @@ def generate_launch_description():
     parameters=[
             amcl_yaml,
             {"use_sim_time": use_sim_time_var},
-            {"tf_broadcast": False}   
+            {"tf_broadcast": True}   
         ],
     )   
     nav2_controller = Node(
@@ -148,7 +148,7 @@ def generate_launch_description():
 
     return LaunchDescription([
         declare_use_sim_time,
-        fake_lidar,
+        #fake_lidar,
         map_server_node,
         amcl_node,
         nav2_planner,

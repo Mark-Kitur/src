@@ -32,6 +32,8 @@ setup(
     entry_points={
         'console_scripts': [
             "ardu = four_wheels_robot.talk_arduino:main",
+            "ai=four_wheels_robot.image_processing:main",
+            "bb=four_wheels_robot.AI_blackboard:main",
         ],
     },
 )

@@ -4,6 +4,7 @@ import time
 from threading import Thread
 
 import py_trees
+from py_trees.timers import Timer 
 import rclpy
 from rclpy.parameter import Parameter
 from std_msgs.msg import String
@@ -20,7 +21,8 @@ class DetectAt(py_trees.behaviour.Behaviour):
     """Listens to /class_detected ONLY while running.
     Writes the first accepted class to blackboard `key`.
     On timeout: writes `default` and succeeds if a default is given, else fails."""
-def __init__(self, name, node, key, accepted, timeout=None, default=None):
+
+    def __init__(self, name, node, key, accepted, timeout=None, default=None):
         super().__init__(name)
         self.node = node
         self.key = key
@@ -85,6 +87,8 @@ def nav(node, name, key):
     x, y, yaw = BIN_POSES[key]
     return NavigateToBin(f"GoTo_{name}", node, x, y, yaw)
 
+def delay(name, secs):
+    return Timer(name=name, duration=secs)
 
 def make_mission(node, obj):
     # gate if open, otherwise ramp
@@ -100,9 +104,12 @@ def make_mission(node, obj):
     mission.add_children([
         IsObject(f"Is_{obj}", obj),
         nav(node, f"{obj}_pickup", f"{obj}_pickup"),
+        delay(f"Wait_for_pickup",10),
         nav(node, "entry_gate", "entry_gate"),
+        delay(f"choose_gate_or_ramp",10),
         DetectAt("DetectGateState", node, "gate_state", GATE_CLASSES,
                  timeout=10.0, default="closed_gate"),   # unsure -> ramp
+        #delay("Process_gate_state",10),
         gate_or_ramp,
         nav(node, f"{obj}_droppoint", f"{obj}_droppoint"),   # last step: mission ends here
     ])
@@ -142,7 +149,7 @@ def main(args=None):
     except KeyboardInterrupt:
         pass
     finally:
-        root.stop(S.INVALID)          # runs terminate(): cancels any live Nav2 goal
+        root.stop(S.INVALID)         
         time.sleep(0.5)
         node.destroy_node()
         rclpy.shutdown()
