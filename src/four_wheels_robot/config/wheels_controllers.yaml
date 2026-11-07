@@ -25,8 +25,8 @@ velocity_controller:
     left_wheel_names: ["back_left_wheel_joint"]
     right_wheel_names: ["back_right_wheel_joint"]
       
-    wheel_separation: 0.92
-    wheel_radius: 0.28
+    wheel_separation: 0.22
+    wheel_radius: 0.0425
 
     odom_frame_id: odom
     base_frame_id: base_link
@@ -43,18 +43,25 @@ velocity_controller:
     linear.x.has_velocity_limits: true
     linear.x.has_acceleration_limits: true
     linear.x.has_jerk_limits: false
-    linear.x.max_velocity: 1.0
-    linear.x.min_velocity: -1.0
-    linear.x.max_acceleration: 1.0
+    linear.x.max_velocity: 5.0
+    linear.x.min_velocity: -5.0
+    linear.x.max_acceleration: 3.0
     linear.x.max_jerk: 0.0
     linear.x.min_jerk: 0.0
 
     angular.z.has_velocity_limits: true
     angular.z.has_acceleration_limits: true
     angular.z.has_jerk_limits: false
-    angular.z.max_velocity: 1.0
-    angular.z.min_velocity: -1.0
-    angular.z.max_acceleration: 1.0
-    angular.z.min_acceleration: -1.0
+    angular.z.max_velocity: 15.0
+    angular.z.min_velocity: -15.0
+    angular.z.max_acceleration: 5.0
+    angular.z.min_acceleration: -5.0
     angular.z.max_jerk: 0.0
     angular.z.min_jerk: 0.0
+
+
+
+
+
+
+
