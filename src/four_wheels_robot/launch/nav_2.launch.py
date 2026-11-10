@@ -11,7 +11,7 @@ def generate_launch_description():
     declare_use_sim_time = DeclareLaunchArgument(
         "use_sim_time", default_value="true", description="Use sim time"
     )
-    use_sim_time_var = LaunchConfiguration('use_sim_time', default=True)
+    use_sim_time_var = LaunchConfiguration('use_sim_time', default="true")
     
     pkg_name = "four_wheels_robot"
     pkg_share_dir = get_package_share_directory(pkg_name)
@@ -19,7 +19,7 @@ def generate_launch_description():
     # 2. Get exact file paths
     amcl_yaml = os.path.join(pkg_share_dir, 'config', 'amcl.yaml')
     nav_params = os.path.join(pkg_share_dir, 'config', 'nav2_params.yaml')
-    map_file = os.path.join(pkg_share_dir, 'map', 'dojo_gamefield.yaml')  
+    map_file = os.path.join(pkg_share_dir, 'map', 't_map_2.yaml')  
 
     map_server_node = Node(
         package="nav2_map_server",
@@ -48,7 +48,7 @@ def generate_launch_description():
         output="screen",    
         parameters=[nav_params, {"use_sim_time": use_sim_time_var}],
         arguments=['--ros-args', '--log-level', 'info'],
-        remappings=[('/cmd_vel', '/cmd_vel')] 
+        #remappings=[('/cmd_vel', '/cmd_vel')] 
     )
     
     nav2_smoother = Node(
@@ -119,8 +119,11 @@ def generate_launch_description():
                     'amcl',
                     'planner_server',
                     'controller_server',
+                    'smoother_server',
                     'behavior_server',
-                    'bt_navigator'
+                    'bt_navigator',
+                    'waypoint_follower',
+                    'collision_monitor'
                 ]
             }]
         )
@@ -133,5 +136,8 @@ def generate_launch_description():
         nav2_controller,
         nav2_behaviour,
         nav2_navigator,
+        nav2_smoother,
+        nav2_waypoint_follower,
+        nav2_collision_avoidance,
         lifecycle_manager
     ])

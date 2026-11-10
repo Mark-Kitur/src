@@ -11,7 +11,7 @@
 <right_joint>back_right_wheel_joint</right_joint>
 
           <wheel_separation>0.26</wheel_separation>
-          <wheel_radius>0.090</wheel_radius>
+          <wheel_radius>0.04250</wheel_radius>
 
           <max_linear_acceleration>10</max_linear_acceleration>
 

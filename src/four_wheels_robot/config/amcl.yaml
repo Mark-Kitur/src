@@ -9,7 +9,7 @@ amcl:
     global_frame_id: "map"
     odom_frame_id: "odom"
     laser_model_type: "likelihood_field"     # Good choice for your Gazebo lidar
-    max_beams: 180
+    max_beams: 100
     max_particles: 2000                      # Fixed typo + better value
     min_particles: 500
     laser_likelihood_max_dist: 2.0
@@ -31,7 +31,7 @@ amcl:
     publish_tf: true
     publish_odom: true
     transform_tolerance: 0.1                 # Usually 0.1
-    update_min_a: 0.2
+    update_min_a: 0.05
     update_min_d: 0.25
     z_hit: 0.5
     z_max: 0.05
