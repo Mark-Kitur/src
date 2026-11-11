@@ -4,7 +4,9 @@ import time
 from threading import Thread
 
 import py_trees
+from py_trees.timers import Timer
 import rclpy
+from rclpy import duration
 from rclpy.parameter import Parameter
 from std_msgs.msg import String
 
@@ -86,6 +88,10 @@ def nav(node, name, key):
     x, y, yaw = BIN_POSES[key]
     return NavigateToBin(f"GoTo_{name}", node, x, y, yaw)
 
+def delaying(name, sec):
+    return Timer(name=name, duration=sec)
+
+
 
 def make_mission(node, obj):
     # gate if open, otherwise ramp
@@ -101,10 +107,13 @@ def make_mission(node, obj):
     mission.add_children([
         IsObject(f"Is_{obj}", obj),
         nav(node, f"{obj}_pickup", f"{obj}_pickup"),
+        delaying(f"wait for pick up", 10),
         nav(node, "entry_gate", "entry_gate"),
+        delaying(f"choosing gate or ramp", 10),
         DetectAt("DetectGateState", node, "gate_state", GATE_CLASSES,
                  timeout=10.0, default="closed_gate"),   # unsure -> ramp
         gate_or_ramp,
+        delaying(f"dumping trash", 10),
         nav(node, f"{obj}_droppoint", f"{obj}_droppoint"),   # last step: mission ends here
     ])
     return mission
