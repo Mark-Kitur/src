@@ -289,18 +289,18 @@ DiffBotSystemHardware::read(const rclcpp::Time &,
   set_state("back_right_wheel_joint/position", right_pos);
   set_state("back_right_wheel_joint/velocity", right_vel);
 
-  set_state("imu_sensor/orientation.x", orientation_x);
-  set_state("imu_sensor/orientation.y", orientation_y);
-  set_state("imu_sensor/orientation.z", orientation_z);
-  set_state("imu_sensor/orientation.w", orientation_w);
+  set_state("imu_link/orientation.x", orientation_x);
+  set_state("imu_link/orientation.y", orientation_y);
+  set_state("imu_link/orientation.z", orientation_z);
+  set_state("imu_link/orientation.w", orientation_w);
 
-  set_state("imu_sensor/angular_velocity.x", angular_velocity_x);
-  set_state("imu_sensor/angular_velocity.y", angular_velocity_y);
-  set_state("imu_sensor/angular_velocity.z", angular_velocity_z);
+  set_state("imu_link/angular_velocity.x", angular_velocity_x);
+  set_state("imu_link/angular_velocity.y", angular_velocity_y);
+  set_state("imu_link/angular_velocity.z", angular_velocity_z);
 
-  set_state("imu_sensor/linear_acceleration.x", linear_acceleration_x);
-  set_state("imu_sensor/linear_acceleration.y", linear_acceleration_y);
-  set_state("imu_sensor/linear_acceleration.z", linear_acceleration_z);
+  set_state("imu_link/linear_acceleration.x", linear_acceleration_x);
+  set_state("imu_link/linear_acceleration.y", linear_acceleration_y);
+  set_state("imu_link/linear_acceleration.z", linear_acceleration_z);
 
   RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 200, "UP");
   return hardware_interface::return_type::OK;

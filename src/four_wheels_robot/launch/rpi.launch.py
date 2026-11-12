@@ -3,6 +3,8 @@ from launch_ros.actions import Node
 from launch import LaunchDescription
 from launch.actions import TimerAction
 from ament_index_python.packages import get_package_share_directory
+from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.actions import IncludeLaunchDescription
 import xacro
 
 
@@ -94,9 +96,15 @@ def generate_launch_description():
             }],
         )
 
+    nav2_launch_path = os.path.join(pkg_name, 'launch', 'nav_2.launch.py')
+    nav2_launch_node = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(nav2_launch_path)
+    )
+
     ld.add_action(robot_state_publisher)
     ld.add_action(controller_manager)
     ld.add_action(timer_action)
     #ld.add_action(robot_localization_node)
     ld.add_action(rf)
+   # ld.add_action(nav2_launch_node)
     return ld
