@@ -5,8 +5,8 @@
     <xacro:property name="wheel_length" value="0.02"/>
 
     <!-- Include control definitions -->
-    <!-- <xacro:include filename="$(find four_wheels_robot)/urdf/ros2_wheel_controllers.xacro"/> -->
-    <xacro:include filename="$(find four_wheels_robot)/urdf/sensors.xacro"/>
+    <xacro:include filename="$(find four_wheels_robot)/urdf/ros2_wheel_controllers.xacro"/>
+   <!-- <xacro:include filename="$(find four_wheels_robot)/urdf/sensors.xacro"/> -->
 
     <xacro:macro name="wheel" params="prefix">
         <link name="${prefix}_wheel">
@@ -33,8 +33,8 @@
         </link>
     </xacro:macro>
 
-    <xacro:wheel prefix="front_left" />
-    <xacro:wheel prefix="front_right"/>
+   <!-- <xacro:wheel prefix="front_left" /> -->
+   <!-- <xacro:wheel prefix="front_right"/> -->
     <xacro:wheel prefix="back_left"/>
     <xacro:wheel prefix="back_right" />
 
@@ -80,13 +80,13 @@
         </joint>
     </xacro:macro>
 
-    <xacro:wheel_joint prefix="front_left"  x="0.10" y="0.162" r="0"/>
-    <xacro:wheel_joint prefix="front_right" x="0.10" y="-0.162" r="0"/>
+   <!-- <xacro:wheel_joint prefix="front_left"  x="0.10" y="0.162" r="0"/> -->
+    <!--<xacro:wheel_joint prefix="front_right" x="0.10" y="-0.162" r="0"/> -->
     <xacro:wheel_joint prefix="back_left"   x="-0.10" y="0.162" r="0"/>
     <xacro:wheel_joint prefix="back_right"  x="-0.10" y="-0.162" r="0"/>
 
     <!--Adding a lidar-->
-    <link name="laser_link">
+    <link name="laser">
         <visual>
             <geometry>
                 <cylinder radius="0.05" length="0.02"/>
@@ -100,7 +100,7 @@
     <joint name="laser_joint" type="fixed">
         <origin xyz="0.0 0.0 0.05" rpy="0.0 0.0 0.0"/>
         <parent link="base_link"/>
-        <child link="laser_link"/>
+        <child link="laser"/>
         <axis xyz="0.0 0.0 0.0"/>
     </joint>
 
