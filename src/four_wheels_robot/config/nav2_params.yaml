@@ -27,9 +27,6 @@ bt_navigator:
       - compute_path_error_code
       - follow_path_error_code
 
-
-
-
 controller_server:
   ros__parameters:
     # controller server parameters (see Controller Server for more info)
