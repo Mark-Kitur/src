@@ -130,5 +130,24 @@
   <origin xyz="0.0 0.0 0.005" rpy="0.0 0.0 0.0"/>
 </joint>
 
+<link name="offload_motor">
+    <visual>
+        <geometry>
+            <cylinder radius="0.1" length="0.2"/>
+        </geometry>
+    </visual>
+    <collision>
+        <geometry>
+            <cylinder radius="0.1" length= "0.2"/>
+        </geometry>
+    </collision>
+</link>
+
+<joint name="offload_motor_joint" type ="continuous">
+    <parent link="base_link"/>
+    <child link="offload_motor"/>
+    <origin xyz="1.4 1 0.5" rpy ="0.0 0.0 0.0"/>
+</joint>
+
 
 </robot>
