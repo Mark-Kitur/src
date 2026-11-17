@@ -278,7 +278,7 @@ DiffBotSystemHardware::read(const rclcpp::Time &,
           linear_acceleration_y, linear_acceleration_z)) {
 
     RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 2000,
-                         "FAILED READING ARDUINO");
+                         "FAILED READING ESP32");
 
     return hardware_interface::return_type::OK;
   }
@@ -316,7 +316,7 @@ DiffBotSystemHardware::write(const rclcpp::Time &, const rclcpp::Duration &) {
 
   if (!arduino_->writeCommand_f(left_cmd, right_cmd)) {
     RCLCPP_ERROR_THROTTLE(get_logger(), *get_clock(), 2000,
-                          "Failed writing to Arduino");
+                          "Failed writing to ESP32");
   }
 
   return hardware_interface::return_type::OK;
