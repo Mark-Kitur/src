@@ -259,19 +259,10 @@ bool ArduinoInterface::readLine(std::string &line) {
   }
 }
 
-bool ArduinoInterface::readFeedback_f(
-    double &left_pos, double &left_vel, double &right_pos, double &right_vel,
+bool ArduinoInterface::readFeedback_f(double &left_pos, double &left_vel,
+                                      double &right_pos, double &right_vel) {
 
-    double &orientation_x, double &orientation_y, double &orientation_z,
-    double &orientation_w,
-
-    double &angular_velocity_x, double &angular_velocity_y,
-    double &angular_velocity_z,
-
-    double &linear_acceleration_x, double &linear_acceleration_y,
-    double &linear_acceleration_z) {
-
-  constexpr int kExpectedFields = 14;
+  constexpr int kExpectedFields = 4;
 
   std::string line;
 
@@ -285,15 +276,8 @@ bool ArduinoInterface::readFeedback_f(
 
   RCLCPP_INFO(rclcpp::get_logger("esp32"), "Received: '%s'", line.c_str());
 
-  int parsed = std::sscanf(
-      line.c_str(), "%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf",
-      &left_pos, &left_vel, &right_pos, &right_vel,
-
-      &orientation_x, &orientation_y, &orientation_z, &orientation_w,
-
-      &angular_velocity_x, &angular_velocity_y, &angular_velocity_z,
-
-      &linear_acceleration_x, &linear_acceleration_y, &linear_acceleration_z);
+  int parsed = std::sscanf(line.c_str(), "%lf,%lf,%lf,%lf", &left_pos,
+                           &left_vel, &right_pos, &right_vel);
 
   if (parsed != kExpectedFields) {
     RCLCPP_WARN(rclcpp::get_logger("esp32"),
@@ -320,12 +304,13 @@ bool ArduinoInterface::readFeedback_f(
   return true;
 }
 
-bool ArduinoInterface::writeCommand_f(double left, double right) {
+bool ArduinoInterface::writeCommand_f(double left, double right,
+                                      double offload) {
   if (serial_fd_ < 0)
     return false;
 
   std::ostringstream msg;
-  msg << left << "," << right << "\n";
+  msg << left << "," << right << "," << offload << "\n";
   const std::string data = msg.str();
 
   ssize_t n = write(serial_fd_, data.c_str(), data.size());

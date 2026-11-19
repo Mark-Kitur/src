@@ -104,8 +104,8 @@
         <axis xyz="0.0 0.0 0.0"/>
     </joint>
 
-    <!-- Adding IMU SENSOR-->
-<link name="imu_link">
+    <!-- Adding offload-->
+<link name="offload_link">
   <visual>
     <geometry>
       <box size="0.1 0.1 0.1"/>
@@ -124,9 +124,9 @@
   
 </link>
 
-<joint name="imu_joint" type="fixed">
+<joint name="offload_joint" type="continuous">
   <parent link="base_link"/>
-  <child link="imu_link"/>
+  <child link="offload_link"/>
   <origin xyz="0.0 0.0 0.005" rpy="0.0 0.0 0.0"/>
 </joint>
 

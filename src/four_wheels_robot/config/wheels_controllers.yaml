@@ -8,14 +8,15 @@ controller_manager:
     velocity_controller:
       type: diff_drive_controller/DiffDriveController
 
+    offload_controller:
+      type: forward_command_controller/ForwardCommandController
 
-    imu_sensor_broadcaster:
-      type: imu_sensor_broadcaster/IMUSensorBroadcaster
-
-imu_sensor_broadcaster:
+offload_controller:
   ros__parameters:
-    sensor_name: "imu_sensor"
-    frame_id: "imu_link"
+    joints:
+      - offload_joint
+    interface_name: velocity
+
 
 velocity_controller:
   ros__parameters:

@@ -60,6 +60,13 @@ def generate_launch_description():
         arguments=['velocity_controller',"--controller-manager",'/controller_manager']
     )
 
+    offload_spawner=Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=['offload_controller',"--controller-manager",'/controller_manager']
+    )
+
+
     ld = LaunchDescription()
 
     timer_action = TimerAction(
@@ -67,6 +74,7 @@ def generate_launch_description():
         actions=[
             joint_state_broadcaster_spawner,
             velocity_spawner,
+            offload_spawner,
         ]
     )
 
