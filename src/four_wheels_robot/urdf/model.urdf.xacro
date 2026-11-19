@@ -61,6 +61,7 @@
             </geometry>
         </collision>
     </link>
+
     <link name="base_footprint"></link>
 
     <joint name="base_joint" type="fixed">
@@ -104,8 +105,8 @@
         <axis xyz="0.0 0.0 0.0"/>
     </joint>
 
-    <!-- Adding IMU SENSOR-->
-<link name="imu_link">
+    <!-- Adding OFFLOAD-->
+<link name="offload_link">
   <visual>
     <geometry>
       <box size="0.1 0.1 0.1"/>
@@ -117,16 +118,16 @@
     </geometry>
   </collision>
   <inertial>
-    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+    <origin xyz="1.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
     <mass value="0.1"/>
     <inertia ixx="0.002" ixy="0.0" ixz="0.002" iyy="0.002" iyz="0.0" izz="0.002"/>
   </inertial>
   
 </link>
 
-<joint name="imu_joint" type="fixed">
+<joint name="offload_joint" type="continuous">
   <parent link="base_link"/>
-  <child link="imu_link"/>
+  <child link="offload_link"/>
   <origin xyz="0.0 0.0 0.005" rpy="0.0 0.0 0.0"/>
 </joint>
 

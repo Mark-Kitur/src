@@ -42,6 +42,7 @@ hardware_interface::CallbackReturn DiffBotSystemHardware::on_init(
 
   this->arduino_ = std::make_unique<ArduinoInterface>();
 
+#ifdef DEBUG_MODE_ENABLED
   // grabs joints
   for (const hardware_interface::ComponentInfo &joint : info_.joints) {
     if (joint.command_interfaces.size() != 1) {
@@ -89,71 +90,7 @@ hardware_interface::CallbackReturn DiffBotSystemHardware::on_init(
     }
   }
 
-  // specifically for IMU
-  for (const hardware_interface::ComponentInfo &sensor : info_.sensors) {
-
-    // checked number, make sure they are 10
-    if (sensor.state_interfaces.size() != 10) {
-      RCLCPP_FATAL(get_logger(), "Expected 10 entries for the IMU sensor");
-      return hardware_interface::CallbackReturn::ERROR;
-    }
-
-    // check all 10 entries
-    if (sensor.state_interfaces[0].name != "orientation.x") {
-      RCLCPP_FATAL(get_logger(), " orientation.x expected.");
-      return hardware_interface::CallbackReturn::ERROR;
-    }
-    if (sensor.state_interfaces[1].name != "orientation.y") {
-      RCLCPP_FATAL(get_logger(), " orientation.y expected.");
-      return hardware_interface::CallbackReturn::ERROR;
-    }
-    if (sensor.state_interfaces[2].name != "orientation.z") {
-      RCLCPP_FATAL(get_logger(), "orientation.z expected.");
-      return hardware_interface::CallbackReturn::ERROR;
-    }
-    if (sensor.state_interfaces[3].name != "orientation.w") {
-      RCLCPP_FATAL(get_logger(), "orientation.w expected.");
-      return hardware_interface::CallbackReturn::ERROR;
-    }
-
-    if (sensor.state_interfaces[4].name != "angular_velocity.x") {
-      RCLCPP_FATAL(get_logger(), "angular_velocity.x expected.");
-      return hardware_interface::CallbackReturn::ERROR;
-    }
-    if (sensor.state_interfaces[5].name != "angular_velocity.y") {
-      RCLCPP_FATAL(get_logger(), "angular_velocity.y expected.");
-      return hardware_interface::CallbackReturn::ERROR;
-    }
-    if (sensor.state_interfaces[6].name != "angular_velocity.z") {
-      RCLCPP_FATAL(get_logger(), "angular_velocity.z expected.");
-      return hardware_interface::CallbackReturn::ERROR;
-    }
-
-    if (sensor.state_interfaces[7].name != "linear_acceleration.x") {
-      RCLCPP_FATAL(get_logger(), "linear_acceleration.x expected.");
-      return hardware_interface::CallbackReturn::ERROR;
-    }
-    if (sensor.state_interfaces[8].name != "linear_acceleration.y") {
-      RCLCPP_FATAL(get_logger(), "linear_acceleration.y expected.");
-      return hardware_interface::CallbackReturn::ERROR;
-    }
-    if (sensor.state_interfaces[9].name != "linear_acceleration.z") {
-      RCLCPP_FATAL(get_logger(), "linear_acceleration.z expected.");
-      return hardware_interface::CallbackReturn::ERROR;
-    }
-
-    // /// Name of the component.
-    // std::string name;
-    // /// Type of the component: sensor, joint, or GPIO.
-    // std::string type;
-    //
-    // std::vector<InterfaceInfo> command_interfaces;
-    // /**
-    //  * Name of the state interfaces that can be read, e.g. "position",
-    //  "velocity", etc.
-    //  * Used by joints, sensors and GPIOs.
-    //  */
-  }
+#endif
 
   // debug log for joints
   for (const hardware_interface::ComponentInfo &joint : info_.joints) {
@@ -166,15 +103,6 @@ hardware_interface::CallbackReturn DiffBotSystemHardware::on_init(
 
     RCLCPP_INFO(get_logger(), "State interfaces:");
     for (const auto &state : joint.state_interfaces) {
-      RCLCPP_INFO(get_logger(), "  - %s", state.name.c_str());
-    }
-  }
-  // debug log for sensors
-  for (const hardware_interface::ComponentInfo &sensor : info_.sensors) {
-    RCLCPP_INFO(get_logger(), "Joint name: %s", sensor.name.c_str());
-
-    RCLCPP_INFO(get_logger(), "State interfaces:");
-    for (const auto &state : sensor.state_interfaces) {
       RCLCPP_INFO(get_logger(), "  - %s", state.name.c_str());
     }
   }
@@ -198,10 +126,8 @@ DiffBotSystemHardware::on_configure(const rclcpp_lifecycle::State &) {
     set_command(name, 0.0);
   }
 
-  // configure the sensor interfaces
-  for (const auto &[name, descr] : sensor_state_interfaces_) {
-    set_state(name, 0.0);
-  }
+  set_state("offload_joint/velocity", 0.0);
+  set_command("offload_joint/velocity", 0.0);
 
   RCLCPP_INFO(get_logger(), "Successfully configured!");
   return hardware_interface::CallbackReturn::SUCCESS;
@@ -240,6 +166,9 @@ DiffBotSystemHardware::on_activate(const rclcpp_lifecycle::State &) {
     RCLCPP_INFO(get_logger(), "Command Interface ---> %s", name.c_str());
   }
 
+  set_state("offload_joint/velocity", 0.0);
+  set_command("offload_joint/velocity", 0.0);
+
   return hardware_interface::CallbackReturn::SUCCESS;
 }
 
@@ -267,15 +196,8 @@ DiffBotSystemHardware::read(const rclcpp::Time &,
   double left_pos, left_vel;
   double right_pos, right_vel;
 
-  double orientation_x, orientation_y, orientation_z, orientation_w;
-  double angular_velocity_x, angular_velocity_y, angular_velocity_z;
-  double linear_acceleration_x, linear_acceleration_y, linear_acceleration_z;
-
-  if (!this->arduino_->readFeedback_f(
-          left_pos, left_vel, right_pos, right_vel, orientation_x,
-          orientation_y, orientation_z, orientation_w, angular_velocity_x,
-          angular_velocity_y, angular_velocity_z, linear_acceleration_x,
-          linear_acceleration_y, linear_acceleration_z)) {
+  if (!this->arduino_->readFeedback_f(left_pos, left_vel, right_pos,
+                                      right_vel)) {
 
     RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 2000,
                          "FAILED READING ARDUINO");
@@ -289,18 +211,8 @@ DiffBotSystemHardware::read(const rclcpp::Time &,
   set_state("back_right_wheel_joint/position", right_pos);
   set_state("back_right_wheel_joint/velocity", right_vel);
 
-  // set_state("imu_sensor/orientation.x", orientation_x);
-  // set_state("imu_sensor/orientation.y", orientation_y);
-  // set_state("imu_sensor/orientation.z", orientation_z);
-  // set_state("imu_sensor/orientation.w", orientation_y);
-  //
-  // set_state("imu_sensor/angular_velocity.x", angular_velocity_x);
-  // set_state("imu_sensor/angular_velocity.y", angular_velocity_y);
-  // set_state("imu_sensor/angular_velocity.z", angular_velocity_z);
-  //
-  // set_state("imu_sensor/linear_acceleration.x", linear_acceleration_x);
-  // set_state("imu_sensor/linear_acceleration.y", linear_acceleration_y);
-  // set_state("imu_sensor/linear_acceleration.z", linear_acceleration_z);
+  set_state("offload_joint/velocity", 0.0);
+  set_state("offload_joint/position", 0.0);
 
   RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 200, "UP");
   return hardware_interface::return_type::OK;
@@ -314,7 +226,11 @@ DiffBotSystemHardware::write(const rclcpp::Time &, const rclcpp::Duration &) {
 
   double right_cmd = get_command("back_right_wheel_joint/velocity");
 
-  if (!arduino_->writeCommand_f(left_cmd, right_cmd)) {
+  double offload_cmd = get_command("offload_joint/velocity");
+
+  RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 200, "%f", offload_cmd);
+
+  if (!arduino_->writeCommand_f(left_cmd, right_cmd, offload_cmd)) {
     RCLCPP_ERROR_THROTTLE(get_logger(), *get_clock(), 2000,
                           "Failed writing to Arduino");
   }

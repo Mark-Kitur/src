@@ -13,6 +13,7 @@ find_package(hardware_interface REQUIRED)
 find_package(pluginlib REQUIRED)
 find_package(rclcpp_lifecycle REQUIRED)
 
+
 #four wheel ROS hardware
 add_library(
 	four_wheel_hardware	
@@ -85,6 +86,19 @@ install(
 	share/${PROJECT_NAME}
 )
 
+#build type
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+	set(CMAKE_BUILD_TYPE Debug CACHE STRING "Build Type" FORCE)
+	set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS Debug Release)
+endif()
+
+#definitions for spdlog
+target_compile_definitions(
+	four_wheel_hardware
+	PRIVATE
+	$<$<CONFIG:Debug>:DEBUG_MODE_ENABLED>
+	$<$<CONFIG:Release>:RELEASE_MODE_ENABLED>
+)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
