@@ -15,8 +15,7 @@ offload_controller:
   ros__parameters:
     joints:
       - offload_joint
-
-
+    interface_name: velocity
 
 velocity_controller:
   ros__parameters:

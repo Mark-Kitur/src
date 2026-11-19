@@ -40,7 +40,7 @@ hardware_interface::CallbackReturn DiffBotSystemHardware::on_init(
 
   RCLCPP_INFO(get_logger(), "ON_INIT-------------------------------");
 
-  this->arduino_ = std::make_unique<ArduinoInterface>();
+  // this->arduino_ = std::make_unique<ArduinoInterface>();
 
 #ifdef DEBUG_MODE_ENABLED
   // grabs joints
@@ -146,10 +146,10 @@ DiffBotSystemHardware::on_activate(const rclcpp_lifecycle::State &) {
   //   // add serial initialization to either /tty/ACM0 or /tty/USB0
   // }
 
-  if (!this->arduino_->connect_f(this->serial_port_, this->baudrate_)) {
-    RCLCPP_ERROR(get_logger(), "FAILED TO CONNECT TO ARDUINO");
-    return hardware_interface::CallbackReturn::ERROR;
-  }
+  // if (!this->arduino_->connect_f(this->serial_port_, this->baudrate_)) {
+  //   RCLCPP_ERROR(get_logger(), "FAILED TO CONNECT TO ARDUINO");
+  //   return hardware_interface::CallbackReturn::ERROR;
+  // }
 
   for (const auto &[name, descr] : joint_state_interfaces_) {
     set_state(name, get_state(name));
@@ -193,17 +193,17 @@ hardware_interface::return_type
 DiffBotSystemHardware::read(const rclcpp::Time &,
                             const rclcpp::Duration &period) {
 
-  double left_pos, left_vel;
-  double right_pos, right_vel;
+  double left_pos = 0, left_vel = 0;
+  double right_pos = 0, right_vel = 0;
 
-  if (!this->arduino_->readFeedback_f(left_pos, left_vel, right_pos,
-                                      right_vel)) {
-
-    RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 2000,
-                         "FAILED READING ARDUINO");
-
-    return hardware_interface::return_type::OK;
-  }
+  // if (!this->arduino_->readFeedback_f(left_pos, left_vel, right_pos,
+  //                                     right_vel)) {
+  //
+  //   RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 2000,
+  //                        "FAILED READING ARDUINO");
+  //
+  //   return hardware_interface::return_type::OK;
+  // }
 
   set_state("back_left_wheel_joint/position", left_pos);
   set_state("back_left_wheel_joint/velocity", left_vel);
@@ -229,11 +229,13 @@ DiffBotSystemHardware::write(const rclcpp::Time &, const rclcpp::Duration &) {
   double offload_cmd = get_command("offload_joint/velocity");
 
   RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 200, "%f", offload_cmd);
+  RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 200, "%f", left_cmd);
+  RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 200, "%f", right_cmd);
 
-  if (!arduino_->writeCommand_f(left_cmd, right_cmd, offload_cmd)) {
-    RCLCPP_ERROR_THROTTLE(get_logger(), *get_clock(), 2000,
-                          "Failed writing to Arduino");
-  }
+  // if (!arduino_->writeCommand_f(left_cmd, right_cmd, offload_cmd)) {
+  //   RCLCPP_ERROR_THROTTLE(get_logger(), *get_clock(), 2000,
+  //                         "Failed writing to Arduino");
+  // }
 
   return hardware_interface::return_type::OK;
 }
