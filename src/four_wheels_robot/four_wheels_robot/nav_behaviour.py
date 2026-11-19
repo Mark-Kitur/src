@@ -7,12 +7,13 @@ from nav2_msgs.action import NavigateToPose
 from rclpy.action import ActionClient
 
 BIN_POSES = {
+    "cam_point":            (0.84786, 1.5192, 1.57),
     "plastic_pickup":       (0.5642, 0.6642, 1.57),    
     "organic_pickup":       (1.0712, 0.6447, 1.57),
     "metal_pickup":         (2.5426, -0.51862, 3.14),
-    "plastic_droppoint":    (0.14758, -0.05103, 0.0),    
-    "organic_droppoint":    (1.29348, -0.0396, 0.0),
-    "metal_droppoint":      (-1.367, 3.2114, 1.57),
+    "plastic_droppoint":    (0.939, -1.0405, 3.142*0.75),    
+    "organic_droppoint":    (0.939, -1.0405,3.142*0.75),
+    "metal_droppoint":      (0.939,  -1.0405, 3.142*0.75),
     "entry_gate" :          (0.81365, 1.60599, 0),
     "gate":                 (0.783, -1.0911, 3.142*0.75),
     "ramp":                 (0.783, -1.0911, 3.142*0.75)

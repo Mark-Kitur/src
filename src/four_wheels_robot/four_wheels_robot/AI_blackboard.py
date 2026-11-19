@@ -103,14 +103,14 @@ def make_mission(node, obj):
     mission = py_trees.composites.Sequence(name=f"Mission_{obj}", memory=True)
     mission.add_children([
         IsObject(f"Is_{obj}", obj),
-        nav(node, f"{obj}_pickup", f"{obj}_pickup"),
+        #nav(node, f"{obj}_pickup", f"{obj}_pickup"),
         delay(f"Wait_for_pickup",10),
-        nav(node, "entry_gate", "entry_gate"),
+        #nav(node, "entry_gate", "entry_gate"),
         delay(f"choose_gate_or_ramp",10),
-        DetectAt("DetectGateState", node, "gate_state", GATE_CLASSES,
-                 timeout=10.0, default="closed_gate"),   # unsure -> ramp
+        #DetectAt("DetectGateState", node, "gate_state", GATE_CLASSES,
+         #        timeout=10.0, default="closed_gate"),   # unsure -> ramp
         #delay("Process_gate_state",10),
-        gate_or_ramp,
+        #gate_or_ramp,
         nav(node, f"{obj}_droppoint", f"{obj}_droppoint"),   # last step: mission ends here
     ])
     return mission
@@ -122,14 +122,14 @@ def main(args=None):
         "bt_node",
         parameter_overrides=[Parameter("use_sim_time", Parameter.Type.BOOL, True)],
     )
-
+    go_cam = nav(node, "cam_point", "cam_point")
     detect_start = DetectAt("DetectAtStart", node, "object_detected", OBJECT_CLASSES)
 
     sorter = py_trees.composites.Selector(name="Sorter", memory=True)
     sorter.add_children([make_mission(node, o) for o in OBJECT_CLASSES])
 
     root = py_trees.composites.Sequence(name="Root", memory=True)
-    root.add_children([detect_start, sorter])
+    root.add_children([go_cam,detect_start, sorter])
     root.setup_with_descendants()
 
     Thread(target=rclpy.spin, args=(node,), daemon=True).start()
