@@ -36,7 +36,7 @@ public:
                                         const rclcpp::Duration &) override;
 
 private:
-  std::unique_ptr<ArduinoInterface> arduino_;
+  std::unique_ptr<ArduinoInterface> esp_;
 
   std::string serial_port_;
   int baudrate_;

@@ -11,10 +11,8 @@ public:
   bool connect_f(const std::string &port, int baudrate);
   void disconnect_f();
 
-  bool writeCommand_f(double , double , double);
-  bool readFeedback_f(double &, double &, double &,
-                      double &
-  );
+  bool writeCommand_f(double, double, double);
+  bool readFeedback_f(double &, double &, double &, double &);
 
 private:
   int serial_fd_;

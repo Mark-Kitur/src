@@ -62,6 +62,12 @@ def generate_launch_description():
         executable="spawner",
         arguments=['velocity_controller',"--controller-manager",'/controller_manager']
     )
+
+    offload_spawner=Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=['offload_controller',"--controller-manager",'/controller_manager']
+    )
     robot_localization_node = Node(
             package='robot_localization',
             executable='ekf_node',
@@ -76,7 +82,7 @@ def generate_launch_description():
         actions=[
             joint_state_broadcaster_spawner,
             velocity_spawner,
-            imu_broadcaster_spawner,
+            offload_spawner,
         ]
     )
 
@@ -105,6 +111,6 @@ def generate_launch_description():
     ld.add_action(controller_manager)
     ld.add_action(timer_action)
     #ld.add_action(robot_localization_node)
-    ld.add_action(rf)
+#    ld.add_action(rf)
    # ld.add_action(nav2_launch_node)
     return ld
