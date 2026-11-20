@@ -18,14 +18,14 @@ namespace four_wheel_hardware {
 ArduinoInterface::ArduinoInterface() : serial_fd_(-1) {
   RCLCPP_INFO(
       rclcpp::get_logger("logger"),
-      "---------------------------------------ARDUINO---WAKE------------------"
+      "---------------------------------------ESP---WAKE------------------"
       "-----------");
 }
 
 ArduinoInterface::~ArduinoInterface() {
   RCLCPP_INFO(
       rclcpp::get_logger("logger"),
-      "---------------------------------------ARDUINO---DIE------------------"
+      "---------------------------------------ESP---DIE------------------"
       "-----------");
 }
 
@@ -33,7 +33,7 @@ bool ArduinoInterface::connect_f(const std::string &port, int baudrate) {
   serial_fd_ = open(port.c_str(), O_RDWR | O_NOCTTY);
 
   if (serial_fd_ < 0) {
-    RCLCPP_ERROR(rclcpp::get_logger("arduino"), "open(%s) failed: %s",
+    RCLCPP_ERROR(rclcpp::get_logger("esp"), "open(%s) failed: %s",
                  port.c_str(), std::strerror(errno));
     return false;
   }
@@ -41,7 +41,7 @@ bool ArduinoInterface::connect_f(const std::string &port, int baudrate) {
   struct termios tty{};
 
   if (tcgetattr(serial_fd_, &tty) != 0) {
-    RCLCPP_ERROR(rclcpp::get_logger("arduino"), "tcgetattr failed: %s",
+    RCLCPP_ERROR(rclcpp::get_logger("esp"), "tcgetattr failed: %s",
                  std::strerror(errno));
     close(serial_fd_);
     serial_fd_ = -1;
@@ -60,7 +60,7 @@ bool ArduinoInterface::connect_f(const std::string &port, int baudrate) {
   tty.c_cflag |= CS8;      // 8 data bits
   tty.c_cflag &= ~CRTSCTS; // no HW flow control
   tty.c_cflag |= CREAD | CLOCAL;
-  tty.c_cflag &= ~HUPCL; // <-- don't drop DTR on close (prevents Mega reset)
+  //tty.c_cflag &= ~HUPCL; // <-- don't drop DTR on close (prevents Mega reset)
 
   // --- Raw input: clear ALL processing, not just IXON/IXOFF/IXANY ---
   tty.c_iflag &= ~(IGNBRK | BRKINT | IGNPAR | PARMRK | ISTRIP | INLCR | IGNCR |
