@@ -47,6 +47,57 @@
             "to_drop_sec": 14.217,
             "fixed_waits_sec": 10.072,
             "timestamp": "2026-11-22 15:48:21"
+        },
+        {
+            "status": "failed",
+            "object": "metal",
+            "route": null,
+            "object_fallback": false,
+            "gate_fallback": false,
+            "total_sec": 214.565,
+            "to_cam_sec": 6.721,
+            "detect_object_sec": 0.201,
+            "to_pickup_sec": null,
+            "detect_gate_sec": null,
+            "via_route_sec": null,
+            "to_drop_sec": null,
+            "offload_sec": null,
+            "failed_after": "pickup_depart",
+            "timestamp": "2026-11-22 22:33:35"
+        },
+        {
+            "status": "success",
+            "object": "organic",
+            "route": "ramp",
+            "object_fallback": false,
+            "gate_fallback": false,
+            "total_sec": 89.174,
+            "to_cam_sec": 6.834,
+            "detect_object_sec": 1.813,
+            "to_pickup_sec": 34.404,
+            "detect_gate_sec": 0.605,
+            "via_route_sec": 19.026,
+            "to_drop_sec": 13.373,
+            "offload_sec": 3.043,
+            "fixed_waits_sec": 10.076,
+            "timestamp": "2026-11-22 22:39:28"
+        },
+        {
+            "status": "success",
+            "object": "metal",
+            "route": "gate",
+            "object_fallback": false,
+            "gate_fallback": false,
+            "total_sec": 93.868,
+            "to_cam_sec": 6.714,
+            "detect_object_sec": 1.206,
+            "to_pickup_sec": 34.085,
+            "detect_gate_sec": 1.909,
+            "via_route_sec": 20.979,
+            "to_drop_sec": 15.849,
+            "offload_sec": 3.043,
+            "fixed_waits_sec": 10.083,
+            "timestamp": "2026-11-22 22:51:46"
         }
     ]
 }

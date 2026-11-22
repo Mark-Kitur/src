@@ -3,6 +3,10 @@ import json
 import os
 from threading import Thread
 
+
+from std_msgs.msg import String, Float64MultiArray
+
+
 import py_trees
 from py_trees.timers import Timer
 import rclpy
@@ -90,6 +94,39 @@ def delay(name, secs):
     return Timer(name=name, duration=secs)
 
 
+class Offload(py_trees.behaviour.Behaviour):
+    """Publishes 1.0, holds for `hold` seconds, then publishes 0.0."""
+
+    def __init__(self, name, node, hold=3.0,
+                 topic="/offload_controller/commands"):
+        super().__init__(name)
+        self.node = node
+        self.hold = hold
+        self.t0 = None
+        self.pub = node.create_publisher(Float64MultiArray, topic, 10)
+
+    def _send(self, value):
+        msg = Float64MultiArray()
+        msg.data = [float(value)]
+        self.pub.publish(msg)
+
+    def initialise(self):
+        self.t0 = time.monotonic()
+        self._send(1.0)                       # start offloading
+
+    def update(self):
+        if time.monotonic() - self.t0 < self.hold:
+            self._send(1.0)                   # keep commanding (10 Hz tick)
+            return S.RUNNING
+        self._send(0.0)                       # return to rest
+        return S.SUCCESS
+
+    def terminate(self, new_status):
+        if new_status == S.INVALID:           # interrupted/stopped: reset
+            self._send(0.0)
+
+
+
 # ─── Timing ───────────────────────────────────────────────────────────
 
 class Mark(py_trees.behaviour.Behaviour):
@@ -119,6 +156,8 @@ def build_entry(marks, obj, status):
         "detect_gate_sec": leg("gate_detect_start", "gate_detected"),
         "via_route_sec":   leg("route_start", "route_done"),
         "to_drop_sec":     leg("drop_start", "end"),
+        "to_drop_sec": leg("drop_start", "drop_done"),
+        "offload_sec": leg("drop_done", "end"),
     }
     total = leg("start", "end")
 
@@ -224,6 +263,8 @@ def make_mission(node, obj, marks):
         delay(f"final_stretch_{obj}", 2),
         Mark(f"M_drop_start_{obj}", marks, "drop_start"),
         nav(node, f"{obj}_droppoint", f"{obj}_droppoint"),
+        Mark(f"M_drop_done_{obj}", marks, "drop_done"),     # arrived at drop point
+        Offload(f"Offload_{obj}", node, hold=3.0),   
     ])
     return mission
 
