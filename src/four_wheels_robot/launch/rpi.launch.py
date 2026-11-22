@@ -111,6 +111,6 @@ def generate_launch_description():
     ld.add_action(controller_manager)
     ld.add_action(timer_action)
     #ld.add_action(robot_localization_node)
-#    ld.add_action(rf)
+    ld.add_action(rf)
    # ld.add_action(nav2_launch_node)
     return ld

@@ -4,7 +4,7 @@ import rclpy
 from rclpy.node import Node
 from std_msgs.msg import String
 
-DETECTED_OBJECTS = ["plastic","organic","closed_gate", "open_gate"]
+DETECTED_OBJECTS = ["plastic","metal","organic","closed_gate", "open_gate"]
 
 
 class FakeDetector(Node):

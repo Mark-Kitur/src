@@ -126,6 +126,20 @@ def generate_launch_description():
         arguments=['--ros-args', '--log-level', 'info']
     )
     
+
+
+    velocity_smoother = Node(
+        package="nav2_velocity_smoother",
+        executable="velocity_smoother",
+        name="velocity_smoother",
+        output="screen",
+        parameters=[nav_params, {"use_sim_time": use_sim_time_var}],
+        arguments=['--ros-args', '--log-level', 'info'],
+        remappings=[
+            ('/cmd_vel', '/velocity_controller/cmd_vel'),      # input from controller
+            ('/cmd_vel_smoothed', '/collision_monitor/cmd_vel_in')
+        ]
+    )
     # 4. Lifecycle Manager controls system startup transition
     lifecycle_manager = Node(
             package="nav2_lifecycle_manager",
@@ -138,7 +152,7 @@ def generate_launch_description():
                 'node_names': [
                     'map_server',
                     'amcl',
-                    'planner_server',
+                    'planner_server','smoother_server','velocity_smoother',
                     'controller_server',
                     'behavior_server',
                     'bt_navigator'
@@ -151,7 +165,7 @@ def generate_launch_description():
         #fake_lidar,
         map_server_node,
         amcl_node,
-        nav2_planner,
+        nav2_planner,nav2_smoother,velocity_smoother,
         nav2_controller,
         nav2_behaviour,
         nav2_navigator,

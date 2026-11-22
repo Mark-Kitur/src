@@ -1,10 +1,12 @@
 
+
 bt_navigator:
   ros__parameters:
-    transform_tolerance: 1.5
+    transform_tolerance: 2.5
     global_frame: map
     robot_base_frame: base_link
     odom_topic: /odom
+    transform_tolerance: 1.1
     bt_loop_duration: 10
     default_server_timeout: 5000
     default_cancel_timeout: 5000
@@ -37,7 +39,7 @@ controller_server:
     min_x_velocity_threshold: 0.0001
     min_y_velocity_threshold: 0.5
     min_theta_velocity_threshold: 0.001
-    failure_tolerance: -0.1
+    failure_tolerance: 1.1
     enable_stamped_cmd_vel: true
     progress_checker_plugins: ["progress_checker"] # progress_checker_plugin: "progress_checker" For Humble and older
     goal_checker_plugins: ["general_goal_checker"]
@@ -59,16 +61,16 @@ controller_server:
       batch_size: 10000
       vx_std: 0.2
       vy_std: 0.2
-      wz_std: 0.4
-      vx_max: 5.0
+      wz_std: 0.5
+      vx_max: 1.70
       vx_min: -0.5
-      vy_max: 0.5
-      wz_max: 1.7650
-      ax_max: 3.0
+      vy_max: 0.05
+      wz_max: 5.20
+      ax_max: 1.10
       ax_min: -3.0
       ay_min: -3.0
       ay_max: 3.0
-      az_max: 3.5
+      az_max: 8.5
       iteration_count: 1
       prune_distance: 1.7
       transform_tolerance: 0.1
@@ -161,13 +163,14 @@ local_costmap:
       update_frequency: 10.0
       publish_frequency: 2.0
       resolution: 0.05
+      transform_tolerance: 1.0
       global_frame: odom
       robot_base_frame: base_link
       rolling_window: true
       width: 6
       height: 6
       introspection_mode: "disabled"
-      footprint: "[[0.18, 0.18], [0.18, -0.18], [-0.18, -0.180], [-0.18, 0.180]]"
+      footprint: "[[0.16, 0.16], [0.16, -0.16], [-0.16, -0.160], [-0.16, 0.160]]"
       plugins: ["obstacle_layer", "voxel_layer", "denoise_layer", "inflation_layer"]
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
@@ -222,7 +225,7 @@ global_costmap:
       footprint_padding: 0.03
       update_frequency: 10.0
       publish_frequency: 4.0
-      transform_tolerance: 0.5
+      transform_tolerance: 1.0
       global_frame: map
       robot_base_frame: base_link
       resolution: 0.05         
@@ -275,25 +278,35 @@ global_costmap:
       always_send_full_costmap: false
 
 
+
 planner_server:
   ros__parameters:
-    expected_planner_frequency: 20.0
-    planner_plugins: ["GridBased"]
-    costmap_update_timeout: 1.0
+    planner_plugins: ['GridBased']
     GridBased:
-      plugin: "nav2_navfn_planner::NavfnPlanner"
-      tolerance: 0.5
-      use_astar: false
-      allow_unknown: true
+      plugin: 'nav2_navfn_planner::NavfnPlanner'
+      use_astar: True
+      allow_unknown: True
+      tolerance: 1.0
+      max_cycles_factor: 4
+
+
+
 
 smoother_server:
   ros__parameters:
-    smoother_plugins: ["simple_smoother"]
-    simple_smoother:
-      plugin: "nav2_smoother::SimpleSmoother"
-      tolerance: 1.0e-10
-      max_its: 1000
-      do_refinement: true
+    costmap_topic: global_costmap/costmap_raw
+    footprint_topic: global_costmap/published_footprint
+    robot_base_frame: base_link
+    transform_tolerance: 1.1
+    smoother_plugins: ["savitzky_golay_smoother"]
+    savitzky_golay_smoother:
+      plugin: "nav2_smoother::SavitzkyGolaySmoother"
+      do_refinement: True
+      refinement_num: 2
+      max_time_index: 25
+
+
+
 
 behavior_server:
   ros__parameters:
@@ -368,3 +381,33 @@ collision_monitor:
       min_height: 0.15
       max_height: 2.0
       enabled: True
+
+
+
+
+
+
+velocity_smoother:
+  ros__parameters:
+    smoothing_frequency: 20.0
+    scale_velocities: False
+    feedback: "OPEN_LOOP"
+    max_velocity: [1.70, 0.05, 5.20]      # match MPPI vx_max/vy_max/wz_max
+    min_velocity: [-0.5, 0.0, -5.20]
+    max_accel: [1.10, 3.0, 8.5]           # match ax_max/ay_max/az_max
+    max_decel: [-3.0, -3.0, -8.5]         # match ax_min/ay_min
+    odom_topic: "odom"
+    odom_duration: 0.1
+    deadband_velocity: [0.0, 0.0, 0.0]
+    velocity_timeout: 1.0
+
+waypoint_follower:
+  ros__parameters:
+    loop_rate: 2
+    stop_on_failure: false
+    action_server_result_timeout: 900.0
+    waypoint_task_executor_plugin: "wait_at_waypoint"
+    wait_at_waypoint:
+      plugin: "nav2_waypoint_follower::WaitAtWaypoint"
+      enabled: True
+      waypoint_pause_duration: 15
